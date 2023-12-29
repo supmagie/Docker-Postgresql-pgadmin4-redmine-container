@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+
+    # db service
+    postgresql:
+        image: postgres:16
+        container_name: postgresql
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./postgres/init:/docker-entrypoint-initdb.docker
+            - ./postgres/db-data:/var/lib/postgresql/data
+        environment:
+            POSTGRES_DB: redminedb
+            POSTGRES_USER: redmine
+            POSTGRES_PASSWORD: redmine
+            POSTGRES_INIDB_ARGS: "--encoding=UTF-8"
+        hostname: postgres
+        restart: always
+        user: root
+
+    # db management service
+    pgadmin4:
+        image: dpage/pgadmin4:8.1
+        container_name: pgadmin4
+        ports:
+            - "80:80"
+        volumes:
+            - ./pgadmin:/var/lib/pgadmin
+        environment:
+            PGADMIN_DEFAULT_EMAIL: root@root.com
+            PGADMIN_DEFAULT_PASSWORD: root
+        hostname: pgadmin4
+        restart: always
+
+    redmine:
+        depends_on:
+            - postgresql
+        image: redmine:5.0.5-bookworm
+        container_name: redmine
+        ports:
+            - "8080:3000"
+        volumes:
+            - ./redmine/files:/usr/src/redmine/files
+            - ./redmine/log:/usr/src/redmine/log
+            - ./redmine/plugins:/usr/src/redmine/plugins
+            - ./redmine/public/themes:/usr/src/redmine/public/themes
+        restart: always
+        environment:
+            REDMINE_DB_POSTGRES: postgres
+            REDMINE_DB_DATABASE: redminedb
+            REDMINE_DB_USERNAME: redmine
+            REDMINE_DB_PASSWORD: redmine
+            TZ: Asia/Tokyo
+
+volumes:
+    postgres: {}
+    pgadmin: {}
+    redmine: {}
