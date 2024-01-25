@@ -6,13 +6,13 @@ First of all, you need to install Docker-Desktop and docker-compose on your comp
 
 ### Install Docker on Mac
 
-It's pretty simple to install Docker on Apple device.
+It's pretty simple to install Docker on Apple devices.
 To install Docker on Mac, please follow this official tutorial from the Docker official website:
 
 <https://docs.docker.com/engine/install/>
 
 Please pay attention to the version you want to download according to the CPU you have.
-Docker-compose will be installed in the same time.
+Docker-compose will be installed at the same time.
 
 ### Install Docker on Linux
 
@@ -33,6 +33,7 @@ To install Docker on Windows, please follow this official tutorial from the Dock
 <https://docs.docker.com/compose/install/linux/>
 
 Docker-compose will be installed in the same time.
+You will need to activate WSL in order to use Docker on a Windows Machine.
 
 ## Docker-compose file
 
@@ -41,12 +42,12 @@ Docker-compose will be installed in the same time.
 Next step is to download the docker-compose you can find on this repository.
 You can use the GUI and download directly a .zip file or you the CLI using `git clone` command.
 
-Once you want the docker compose file, you can open it if you want to check or change the default users username and password.
-You can also use the default settings to do the test but don't forget to change it when you use in Prod.
+Once you have the docker compose file, you can open it if you want to check or change the default some settings like username and password. The best is to put theses informations in differents file like `.env` file.
+You can also use the default settings to do the test but don't forget to change it when you use it in Prod.
 
 ### Further explanations
 
-Let's check futher in this Docker File
+Let's check further in this Docker File
 
 ```version: '3.9'
 
@@ -110,14 +111,14 @@ volumes:
     redmine: {}
 ```
     
-As you can, we have here 3 services,
+As you can, we have here 3 services:
 - postgresql
 - pgadmin4
 - redmine
 
 #### Postgresql
 
-I choosed to use Postgresql but you can also use MySQL, SQLite...
+I chose to use Postgresql but you can also use MySQL, SQLite...
 For this tutorial, I'll only present how to use Postgresql.
 
 ```
@@ -144,33 +145,33 @@ I use the Official Docker Hub image of Postgresql version 16 (`postgresql:16`) s
 
 About the container name, you can choose what you want. I choosed `postgresql`.
 
-I also used the default ports for Postgresql, `5432`.
+I also used the default ports for Postgresql: `5432`.
 
 I created 2 volumes to stores the data on the hosts:
 
-- The first one is to store an init file if you want to create specific settings when you start the container
-- The second one is to store the data of the databases
+- The first one is to store an init file if you want to create specific settings when you start the container. It's the best idea for set you database with your own settings.
+- The second one is to store the data of the databases.
 
 Next step is to setup the environment. Let's check further:
 
 `POSTGRES_DB: redminedb` is the name of the db we want to create.
-If you don't set a name, Posgre will use the username as database name.
+If you don't set a name, Posgres will use the username as database name.
 
 `POSTGRES_USER: redmine` is the user we want to set to access the db
 
 `POSTGRES_PASSWORD: redmine` is the password of this user
 
-`POSTGRES_INIDB_ARGS: "--encoding=UTF-8"` is to avois issues with the init files
+`POSTGRES_INIDB_ARGS: "--encoding=UTF-8"` is to avoid issues with the init files
 
-You can also add other environment settings. Please chech the following Office Docker Hub link for more details:
+You can also add other environment settings. Please check the following Official Docker Hub link for more details:
 
 <https://hub.docker.com/_/postgres>
 
-I choosed `postgres` as hostname. We will use it later.
+I chose`postgres` as hostname. We will use it later.
 
 The restart option should be `restart:always` because it's database and we want the container to restart if we have problem.
 
-And, user is set to `root`.
+Finally, user is set to `root`.
 
 
 #### Pgadmin4
@@ -194,7 +195,7 @@ Pgadmin4 allow you to access to databases from a web interface.
 
 Here it's pretty the same things.
 
-I choosed the non Official image `dpage/pgadmin4:8.1`. At the time I write this tutorial, we don't have Docker Hub Official repository for pgadmin4.
+I chose the non Official image `dpage/pgadmin4:8.1`. At the time I write this tutorial, we don't have Docker Hub Official repository for pgadmin4.
 
 I set the container name to `pgadmin4`.
 
@@ -208,7 +209,7 @@ And I set `restart:always` so Docker can restart the container is we have issue.
 
 #### Redmine
 
-According to the Official Redmine website: "Redmine is a flexible project management web application written using Ruby on Rails framework". If you need further explanations or the the documentation, please follow this link:
+According to the Official Redmine website: "Redmine is a flexible project management web application written using Ruby on Rails framework". If you need further explanations or the documentation, please follow this link:
 
 <https://www.redmine.org/projects/redmine>
 
@@ -234,20 +235,20 @@ According to the Official Redmine website: "Redmine is a flexible project manage
             TZ: Asia/Tokyo
 ```
 
-First, I set `depends_on` to `posgresql` to redmine stacks will wait for the posgresql service to start before start. It' perfect because we need the database to use Redmine. If you set a different name for the service associate to Posgresql, don't forget to change here too.
+First, I set `depends_on` so `posgresql` to redmine stack will wait for the posgresql service to start before start. It' perfect because we need the database to use Redmine. If you set a different name for the service associate to Posgresql, don't forget to change here too.
 
-I choosed the Official Docker Hub Redmine image to version 5.0.5 with bookworm install so I can access to more fonctionnality if I want to access to the container. This image is really good because it install Ruby, Ruby on Rails, Redmine and even run the `rails server` command so when we launch the container, we can access direclty to the homepage.
+I chose the Official Docker Hub Redmine image to version 5.0.5 with bookworm install so I can access to more functionality if I want to access to the container. This image is really good because it install Ruby, Ruby on Rails, Redmine and even run the `rails server` command so when we launch the container, we can access directly to the homepage.
 If you need a more recent image, you can try but it may not work.
 
 I set the container name to `redmine`.
 
-I set the port `8080` to access using `http://localhost:8080`. We can't use port 80 because pgadmin already use it.
+I set the port `8080` to access using `http://localhost:8080`. We can't use port 80 because pgadmin already using it.
 
-I set the differents volumes so we can access easilty to some folders from the host and keep data just in case.
+I set different volumes so we can access easily to some folders from the host and keep data just in case.
 
 I set `restart:always` so Docker can restart the container is we have issue.
 
-I set the differents environment settings:
+I set the different environment settings:
 
 `REDMINE_DB_POSTGRES: postgres` I tell to Redmine I want to use posgres as database management system.
 
@@ -259,7 +260,7 @@ I set the differents environment settings:
 
 All theses information will be used to update automatically the config/database.yml file in the Redmine container.
 
-And I set TZ: Asia/Tokyo because I live in Tokyo si it don't cause problem with the time.
+And I set TZ: Asia/Tokyo because I live in Tokyo so it don't cause problem with the time.
 
 ## Launch the container
 
@@ -284,11 +285,11 @@ Now you are ready to launch the container:
 With this command, you launch docker compose and you have directly access to the terminal when the containers are running.
 This step may take time because Docker needs to pull the images if it's the first you are running this command for theses images.
 
-If you want to can also launch:
+If you want you can also launch:
 
 `docker-compose up`  to access to the logs when you launch the containers.
 
-If you want to access to the logs later, just tap:
+If you want to access to the logs after launched the container, just tap:
 
 `docker-compose logs -f ` from the REDMINE-FOLDER
 
@@ -296,20 +297,23 @@ So you can follow the logs.
 If you got an error, please check your docker-compose.yml file.
 You can also launch:
 
-`docker-compose config` to check if the syntax of your file is correct. The indentation is really importante here.
+`docker-compose config` to check if the syntax of your file is correct. The indentation is really important here.
 
 Next, check the containers are running with
 
 `docker-compose ps`
 
-If you can see the 3 services, that means theay are running. If not, please double check your docker-compose.yml file.
+If you can see the 3 services, that means they are running. If not, please double check your docker-compose.yml file.
 
 ## Access to the services
 
-Now your container are running, you should be able to access to your services.
+Now, your container are running, you should be able to access to your services.
+
+### Pgadmin4
+
 To access to pgadmin web interface, go to `http://localhost:80`.
 
-To log in, use the username/password you choosed in the docker-compose.yml file. For me it's `root@root.com` as username and `root` as password.
+To log in, use the username/password you chose in the docker-compose.yml file. For me it's `root@root.com` as username and `root` as password.
 From here you can access to the main interface.
 
 Click on `Add New Server` to access to your Postgresql database.
@@ -328,6 +332,12 @@ Password: redmine
 And press `Save`.
 
 You should be able to see the database on the left.
+
+### Redmine
+
+To access to redmine web interface, go to http://localhost:8080
+
+To log in
 
 
 === ADD HERE ===
