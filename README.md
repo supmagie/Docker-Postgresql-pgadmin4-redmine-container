@@ -1,3 +1,11 @@
+Softwares and services versions we use for this project:
+
+Redmine v5.0.5
+PostgreSQL v16
+Pgadmin4 v8.1
+Ruby v3.0.2
+Ruby On rails v6.1.7.2
+
 # Docker Redmine/Posgresql/Pgadmin4 container
 
 ## Install Docker
@@ -337,7 +345,7 @@ You should be able to see the database on the left.
 
 To access to redmine web interface, go to http://localhost:8080
 
-To log in
+To log in the default username/password is admin/admin
 
 
 === ADD HERE ===
