@@ -1,10 +1,10 @@
 Softwares and services versions we use for this project:
 
-Redmine v5.0.5
-PostgreSQL v16
-Pgadmin4 v8.1
-Ruby v3.0.2
-Ruby On rails v6.1.7.2
+- Redmine v5.0.5
+- PostgreSQL v16
+- Pgadmin4 v8.1
+- Ruby v3.0.2
+- Ruby On rails v6.1.7.2
 
 # Docker Redmine/Posgresql/Pgadmin4 container
 
@@ -319,7 +319,7 @@ Now, your container are running, you should be able to access to your services.
 
 ### Pgadmin4
 
-To access to pgadmin web interface, go to `http://localhost:80`.
+To access to pgadmin web interface, go to <http://localhost:80>.
 
 To log in, use the username/password you chose in the docker-compose.yml file. For me it's `root@root.com` as username and `root` as password.
 From here you can access to the main interface.
@@ -343,9 +343,113 @@ You should be able to see the database on the left.
 
 ### Redmine
 
-To access to redmine web interface, go to http://localhost:8080
+To access to redmine web interface, go to <http://localhost:8080>.
 
-To log in the default username/password is admin/admin
+To log in the default username/password is admin/admin.
+You should be able to access to the default interface and start to use it.
+
+## Set Redmine
+
+### Install Dependencies
+
+In the following steps, I'll adapt to my case.
+First, we need to add a Line in the GemFile.
+
+Open a CMD and tap
+`Docker ps`
+to get the container id. For me is something like ede8798yev
+
+Tap
+`docker exec -it ede bash` in order to access to the container.
+
+Once you are inside, open the file call `GemFile` with Vim
+
+`vim GemFile`
+
+And add the following line at the end of the dependency list:
+
+`gem 'matrix', '~> 0.4.2'`
+
+Once it's done, tap
+
+`gem install bundler`
+
+`bundle install`
+
+If you don't have error, you should have all the dependencies you need.
+
+### Install plugins
+
+Redmine propose a lot of different plugins. Some are free and some you need to pay for but they have a pretty big list.
+If you decide to install a plugin, please follow the following steps.
+
+You can do the first steps on the Host.
+Open you Redmine folder (created by the volume) and go to `plugins/`
+Once you are in this folder, create a folder name `plugin_assets/`
+
+Paste the plugin(s) you have (Each plugin is a folder so copy directly the folder).
+
+Once it's done, open a CMD and tap:
+
+`docker exec -it ede bash` in order to access to the container.
+
+Tap:
+`chown -R 755 plugins/plugin_assets/` to set the correct right to the new folder
+
+Once it's done, tap:
+
+`bundle exec rake redmine:plugins:migrate RAILS_ENV=production` to install the plugins.
+
+If you want to check, you can open Redmine on the browser (<http://localhost:8080>), log in, go to **Administration** > **Plugins**
+
+You shoud see the list of plugins.
+
+### Change theme
+
+Redmine software propose also to change the theme.
+If you want to change it, please follow the following steps:
+
+On the host, Open your `Redmine/` folder and go to `public/themes/`
+You now may need to restart Redmine container in order to see the theme.
+
+`docker restart ede`
+
+Once it's done, open Redmine on the browser (<http://localhost:8080>), log in, go to **Administration** > **Settings** > **Display** and select the theme you want. Don't forget to **Save**.
+
+You should see the new Theme.
+
+### Migrate database
+
+#### Dbeaver preparation
+
+First, download a software to manage database.
+For my case, I will use **DBeaver** on Mac
+
+Once you have the software, if it's the first time you use it, you need to create a new local database client.
+
+Using Homebrew, install libpq package for PostgreSQl
+
+`brew install libpq`
+
+For MySQL, install mysql-client package
+
+`brew install mysql-client`
+
+To find the installation path for the local client of a database in Dbeaver for PosgreSQL, open CMD and tap:
+
+find / -name "pg_dump" 2>/dev/null
+
+You should get the path so copy this path and open Dbeaver.
+
+
+
+=== ADD HERE ===
+
+
+For more information about this, please check the following link: <https://dbeaver.com/docs/dbeaver/Local-Client-Configuration/>
+
+#### Migration
+
 
 
 === ADD HERE ===
