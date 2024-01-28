@@ -55,7 +55,7 @@ You can also use the default settings to do the test but don't forget to change 
 
 ### Further explanations
 
-Let's check further in this Docker File
+Let's check further in this Docker compose file
 
 ```version: '3.9'
 
@@ -365,6 +365,10 @@ Tap
 Once you are inside, open the file call `GemFile` with Vim
 
 `vim GemFile`
+
+You may need to install Vim first so tap:
+
+`apt-get update -y && apt-get install vim`
 
 And add the following line at the end of the dependency list:
 
