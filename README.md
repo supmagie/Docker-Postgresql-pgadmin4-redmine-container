@@ -203,7 +203,7 @@ Pgadmin4 allow you to access to databases from a web interface.
 
 Here it's pretty the same things.
 
-I chose the non Official image `dpage/pgadmin4:8.1`. At the time I write this tutorial, we don't have Docker Hub Official repository for pgadmin4.
+I chose the non Official image `dpage/pgadmin4:8.1`. At the time of writing this tutorial, we don't have Docker Hub Official repository for pgadmin4.
 
 I set the container name to `pgadmin4`.
 
@@ -370,13 +370,16 @@ You may need to install Vim first so tap:
 
 `apt-get update -y && apt-get install vim`
 
-And add the following line at the end of the dependency list:
+You also need to install the Linux compilation tools:
 
-`gem 'matrix', '~> 0.4.2'`
+`apt-get install build-essential`
+
+(((((And add the following line at the end of the dependency list:
+Up`gem 'matrix', '~> 0.4.2'`))) Updating. Please ignore
 
 Once it's done, tap
 
-`gem install bundler`
+`gem install install matrix -v '~> 0.4.2' bundler bigdecimal`
 
 `bundle install`
 
@@ -389,9 +392,9 @@ If you decide to install a plugin, please follow the following steps.
 
 You can do the first steps on the Host.
 Open you Redmine folder (created by the volume) and go to `plugins/`
-Once you are in this folder, create a folder name `plugin_assets/`
-
 Paste the plugin(s) you have (Each plugin is a folder so copy directly the folder).
+
+Create a folder name `plugin_assets/` in `plugins/`
 
 Once it's done, open a CMD and tap:
 
@@ -400,11 +403,14 @@ Once it's done, open a CMD and tap:
 Tap:
 `chown -R 755 plugins/plugin_assets/` to set the correct right to the new folder
 
+We need to create this folder because some plugins need it.
+
 Once it's done, tap:
 
 `bundle exec rake redmine:plugins:migrate RAILS_ENV=production` to install the plugins.
 
 If you want to check, you can open Redmine on the browser (<http://localhost:8080>), log in, go to **Administration** > **Plugins**
+You may need to restart Redmine container.
 
 You shoud see the list of plugins.
 
